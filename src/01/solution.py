@@ -1,11 +1,4 @@
-def read_prompt():
-  f = open("prompt.txt", "r")
-  string = f.read()
-  array = string.split("\n")
-
-  return array
-
-values = read_prompt()
+from src.prompt import Prompt
 
 def part_1_solution(values):
   count = 0
@@ -20,7 +13,7 @@ def part_1_solution(values):
     if maximum < count:
       maximum = count
 
-  print(maximum)
+  return maximum
 
 def part_2_solution(values):
   count = 0
@@ -37,7 +30,7 @@ def part_2_solution(values):
     if len(counts) > 3:
       counts.remove(min(counts))
 
-  print(sum(counts))
+  return sum(counts)
 
-part_1_solution(values)
-part_2_solution(values)
+def transform_prompt():
+  return Prompt.read(__file__)
