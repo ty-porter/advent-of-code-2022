@@ -8,7 +8,3 @@ class Color:
 
 def colorize(text, color_code):
     return f"\033[{color_code}m{text}\033[0m"
-
-    CRED = '\033[91m'
-    CEND = '\033[0m'
-    print(CRED + "Error, does not compute!" + CEND)
