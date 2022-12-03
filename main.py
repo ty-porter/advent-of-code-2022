@@ -32,7 +32,7 @@ for index, solution_dir in enumerate(solution_dirs):
     indent = " " * 2
     
     if index > 0:
-        print("\n")
+        print()
 
     day = str(int(solution_dir.split("/")[-1]))
 
