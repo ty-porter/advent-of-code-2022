@@ -1,4 +1,4 @@
-import argparse, importlib, os
+import argparse, copy, importlib, os
 
 from src.utils import Color, colorize
 
@@ -38,5 +38,5 @@ for index, solution_dir in enumerate(solution_dirs):
 
     print(indent + colorize(f"- DAY {day}", Color.CYAN))
 
-    print(indent * 3 + "Part 1: " + colorize(solution_runner.part_1_solution(values), Color.YELLOW))
-    print(indent * 3 + "Part 2: " + colorize(solution_runner.part_2_solution(values), Color.YELLOW))
+    print(indent * 3 + "Part 1: " + colorize(solution_runner.part_1_solution(copy.deepcopy(values)), Color.YELLOW))
+    print(indent * 3 + "Part 2: " + colorize(solution_runner.part_2_solution(copy.deepcopy(values)), Color.YELLOW))
