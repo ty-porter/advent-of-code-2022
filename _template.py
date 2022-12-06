@@ -7,4 +7,4 @@ def part_2_solution(values):
   return
 
 def transform_prompt():
-  return Prompt.read(__file__)
+  return Prompt.read_to_list(__file__)

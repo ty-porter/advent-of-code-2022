@@ -50,7 +50,7 @@ def transform_prompt():
   stack_complete = False
   instructions = []
   
-  for line in Prompt.read(__file__):
+  for line in Prompt.read_to_list(__file__):
     if len(line) == 0:
       stack_complete = True
       continue

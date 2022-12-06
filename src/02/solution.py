@@ -10,4 +10,4 @@ def part_2_solution(values):
   return sum(SCORE_TABLE[MAPPING[value]] for value in values)
 
 def transform_prompt():
-  return Prompt.read(__file__)
+  return Prompt.read_to_list(__file__)
