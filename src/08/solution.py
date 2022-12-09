@@ -79,7 +79,6 @@ def part_1_solution(grid):
 
   return sum(sum(row) for row in visible_trees)
 
-
 def part_2_solution(grid):
   tree_scores = scene_scores(grid)
 
