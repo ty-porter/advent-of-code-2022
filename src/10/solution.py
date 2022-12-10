@@ -6,7 +6,15 @@ class CPU:
     self.pc = 0
     self.x  = 1
     self.trace = { self.pc: self.x }
-  
+
+  def parse_instructions(self, instructions):
+    for instruction in instructions:
+      if instruction == "noop":
+        self.noop()
+      else:
+        _addx, amt = instruction.split(" ")
+        self.addx(int(amt))
+
   def increment_program_counter(before):
     def inc_pc_counter_decorator(fn, *args):
       def decorator(self, *fnargs):
@@ -32,25 +40,13 @@ class CPU:
 
 def part_1_solution(instructions):
   cpu = CPU()
-
-  for instruction in instructions:
-    if instruction == "noop":
-      cpu.noop()
-    else:
-      _addx, amt = instruction.split(" ")
-      cpu.addx(int(amt))
+  cpu.parse_instructions(instructions)
 
   return sum(cpu.trace[target] * target for target in range(20, 221, 40))
 
 def part_2_solution(instructions):
   cpu = CPU()
-
-  for instruction in instructions:
-    if instruction == "noop":
-      cpu.noop()
-    else:
-      _addx, amt = instruction.split(" ")
-      cpu.addx(int(amt))
+  cpu.parse_instructions(instructions)
 
   crt = []
 
