@@ -7,9 +7,10 @@ def move(head, tail):
   if abs(distance[0]) <= 1 and abs(distance[1]) <= 1:
     return
 
-  # Diagonal
+  # Diagonal move
   if sum(abs(part) for part in distance) > 2:
     offset = [int(distance[0] / abs(distance[0])), int(distance[1] / abs(distance[1]))]
+  # Cardinal move
   else:
     offset = [int(part / abs(part)) if abs(part) > 0 else 0 for part in distance]
 
@@ -43,7 +44,6 @@ def solution(instructions, rope_size=2):
       if tuple(section) not in visited:
         visited.append(tuple(section))
 
-  # print(visited)
   return len(visited)
 
 def part_1_solution(instructions):
