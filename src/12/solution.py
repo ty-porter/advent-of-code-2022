@@ -29,7 +29,7 @@ def neighbors(grid, x, y):
 def at(grid, x, y):
   return grid[y][x]
 
-def dikstra(args):
+def dijkstra(args):
   grid, initial, target = args
   visited = set()
   pqueue = queue.PriorityQueue()
@@ -53,10 +53,10 @@ def dikstra(args):
           pqueue.put((steps + 1, (neighbor, [*path, position])))
 
   # Handle getting stuck by steps > max size of grid
-  return len(grid) * len(grid[0]) + 1
+  return len(grid) * len(grid[0])
 
 def part_1_solution(args):
-  return dikstra(args)
+  return dijkstra(args)
 
 def part_2_solution(args):
   grid, initial, target = args
@@ -68,11 +68,11 @@ def part_2_solution(args):
       if col == 0:
         initials.append((x, y))
 
-  min_steps = len(grid) * len(grid[0]) + 1
+  min_steps = len(grid) * len(grid[0])
 
   # This isn't optimized, but it's fast enough.
   for initial in initials:
-    steps = dikstra([grid, initial, target])
+    steps = dijkstra([grid, initial, target])
     min_steps = min(min_steps, steps)
 
   return min_steps
