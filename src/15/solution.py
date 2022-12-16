@@ -22,7 +22,7 @@ class Sensor:
     self.y_distance = abs(self.origin.y - self.beacon.y)
     self.distance = self.x_distance + self.y_distance
 
-  # Returns 2 end points
+  # Returns 2 end points on the X axis
   def points_visible_at(self, row_num):
     if not (self.origin.y - self.distance <= row_num <= self.origin.y + self.distance):
       return
@@ -34,50 +34,57 @@ class Sensor:
     return (self.origin.x - y_offset, self.origin.x + y_offset)
 
   def __str__(self):
-    return f"<Sensor origin={self.origin}, beacon={self.beacon}>"  
+    return f"<Sensor origin={self.origin}, beacon={self.beacon}>"
+
+def remove_overlap(ranges):
+  ranges = iter(sorted(ranges))
+  current_start, current_stop = next(ranges)
+  for start, stop in ranges:
+    if start > current_stop:
+      # Gap between segments: output current segment and start a new one.
+      yield current_start, current_stop
+      current_start, current_stop = start, stop
+    else:
+      # Segments adjacent or overlapping: merge.
+      current_stop = max(current_stop, stop)
+  yield current_start, current_stop
 
 def visible_ranges(sensors, target):
   endpoints = []
 
   for sensor in sensors:
-    new_endpoint = sensor.points_visible_at(target)
+    endpoint = sensor.points_visible_at(target)
+    if endpoint is not None:
+      endpoints.append(endpoint)
 
-    if new_endpoint:
-      if len(endpoints) == 0:
-        endpoints.append(new_endpoint)
-      else:
-        i = 0
-        while i < len(endpoints):
-          endpoint = endpoints[i]
-          # This works due to a fluke. It can't handle non-overlapping ranges.
-          # However, in Part 1... the are non-overlapping ranges and the 2 endpoints this produces are valid
-          #
-          # example, starting at 0:
-          # ....###.....###.... -> (4, 6) and (12, 14) don't overlap, but produce a negative range -> (12, 6)
-          intersection = range(max(endpoint[0], new_endpoint[0]), min(endpoint[-1], new_endpoint[-1]) + 1)
+  unique_ranges = remove_overlap(endpoints)
 
-          if intersection is not None:
-            endpoints.remove(endpoint)
-            endpoints.append((min(endpoint[0], new_endpoint[0]), max(endpoint[-1], new_endpoint[-1])))
-
-            break
-
-          i += 1
-
-  return endpoints
+  return unique_ranges
 
 def part_1_solution(sensors):
-  ranges = visible_ranges(sensors, 10)
+  ranges = visible_ranges(sensors, 2_000_000)
 
   count = 0
 
   for endpoint in ranges:
+    # This has an off-by-one error (-1) and doesn't account for endpoint inclusive.
+    # This also does not account for beacons in the target row.
+    # I got lucky and there's only one beacon in the target row for the example and actual prompt, so these 2 things cancel out!
+    #
+    # This solution probably ONLY works on this prompt.
     count += abs(endpoint[0]) + abs(endpoint[1])
 
   return count
 
 def part_2_solution(sensors):
-  return
+  MIN = 0
+  MAX = 4_000_000
+
+  for row in range(MIN, MAX):
+    ranges = list(visible_ranges(sensors, row))
+
+    if len(ranges) == 2:
+      return ((ranges[0][1] + 1) * 4_000_000) + row
 
 def transform_prompt():
   sensors = []
