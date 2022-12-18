@@ -89,7 +89,7 @@ def print_grid(grid):
 
   print("\n")
 
-def part_1_solution(jets):
+def simulate(jets, limit=2022):
   shapes_settled = 0
   j = 0
   shape = SHAPES[0]
@@ -100,7 +100,24 @@ def part_1_solution(jets):
   pos = [START_X, len(shape) - 1]
   previously_blocked = False
 
-  while shapes_settled < 2022:
+  tracked = {}
+
+  while shapes_settled < limit:
+    key = (j % len(jets), SHAPES.index(shape))
+
+    if key in tracked:
+      prev_shapes_settled, height = tracked[key]
+      period = shapes_settled - prev_shapes_settled
+
+      if shapes_settled % period == limit % period:
+        cycle_height = (len(grid) - padding(grid)) - height
+        shapes_remaining = limit - shapes_settled
+        cycles_remaining = (shapes_remaining // period)
+
+        return len(grid) - padding(grid) + (cycle_height * cycles_remaining)
+    else:
+      tracked[key] = (shapes_settled, len(grid) - padding(grid))
+
     direction = LEFT if jets[j % len(jets)] == '<' else RIGHT
     j += 1
 
@@ -130,8 +147,11 @@ def part_1_solution(jets):
 
   return len(grid) - padding(grid)
 
+def part_1_solution(jets):
+  return simulate(jets)
+
 def part_2_solution(jets):
-  return
+  return simulate(jets, limit=1_000_000_000_000)
 
 def transform_prompt():
   return Prompt.read(__file__)
