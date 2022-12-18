@@ -83,6 +83,9 @@ def pad_grid(grid, shape):
 def padding(grid):
   return sum(1 if sum(line) == 0 else 0 for line in grid)
 
+def height(grid):
+  return len(grid) - padding(grid)
+
 def print_grid(grid):
   for line in grid:
     print("".join("." if value == 0 else "#" for value in line))
@@ -106,17 +109,17 @@ def simulate(jets, limit=2022):
     key = (j % len(jets), SHAPES.index(shape))
 
     if key in tracked:
-      prev_shapes_settled, height = tracked[key]
+      prev_shapes_settled, prev_height = tracked[key]
       period = shapes_settled - prev_shapes_settled
 
       if shapes_settled % period == limit % period:
-        cycle_height = (len(grid) - padding(grid)) - height
+        cycle_height = height(grid) - prev_height
         shapes_remaining = limit - shapes_settled
         cycles_remaining = (shapes_remaining // period)
 
-        return len(grid) - padding(grid) + (cycle_height * cycles_remaining)
+        return height(grid) + (cycle_height * cycles_remaining)
     else:
-      tracked[key] = (shapes_settled, len(grid) - padding(grid))
+      tracked[key] = (shapes_settled, height(grid))
 
     direction = LEFT if jets[j % len(jets)] == '<' else RIGHT
     j += 1
@@ -145,7 +148,7 @@ def simulate(jets, limit=2022):
 
       pad_grid(grid, shape)
 
-  return len(grid) - padding(grid)
+  return height(grid)
 
 def part_1_solution(jets):
   return simulate(jets)
