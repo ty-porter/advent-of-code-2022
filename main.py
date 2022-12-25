@@ -17,7 +17,7 @@ if args.solution:
     else:
         raise Exception(f"Solution directory 'src/{solution_dir}' does not exist!")
 else:
-    for solution_dir in os.listdir("src"):
+    for solution_dir in sorted(os.listdir("src")):
         if os.path.isdir(f"src/{solution_dir}") and solution_dir != "__pycache__":
             solution_dirs.append(f"src/{solution_dir}")
 
