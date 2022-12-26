@@ -26,7 +26,7 @@ class SNAFU:
   def update_decimal(self):
     total = 0
 
-    if self.decimal is not None: return self.decimal
+    if self.decimal is not None: return
 
     for i, character in enumerate(reversed(self.snafu)):
       if character in ["-", "="]:
